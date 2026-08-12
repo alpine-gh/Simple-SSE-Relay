@@ -28,3 +28,4 @@ Although this was made for an n8n workflow (to create a AI agent chat using an S
 |Docker Env Variable |Value |Description |
 |---|---|---|
 |`LOGS` |`true`/`false` |Set to `true` by default. Posts payload information. |  
+|`SERVER_PROTOCOL` |`http`/`http2` |Defaults to `http` (current behavior). Set to `http2` to enable HTTP/2 mode for higher concurrent browser streams. |  

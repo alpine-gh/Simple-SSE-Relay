@@ -1,15 +1,23 @@
 const http = require('http');
+const http2 = require('http2');
 
 const clients = new Map();
 
 const LOGS = process.env.LOGS === 'true';
+const SERVER_PROTOCOL = (process.env.SERVER_PROTOCOL || 'http').toLowerCase();
+const USE_HTTP2 = SERVER_PROTOCOL === 'http2';
+
+if (SERVER_PROTOCOL !== 'http' && SERVER_PROTOCOL !== 'http2') {
+  console.warn(`[${new Date().toISOString()}] Invalid SERVER_PROTOCOL "${process.env.SERVER_PROTOCOL}". Falling back to http.`);
+}
+
 const log = (message) => {
   if (LOGS) {
     console.log(`[${new Date().toISOString()}] ${message}`);
   }
 };
 
-const server = http.createServer((req, res) => {
+const server = (USE_HTTP2 ? http2 : http).createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -19,7 +27,8 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  const url = new URL(req.url, `http://${req.headers.host}`);
+  const host = req.headers.host || req.headers[':authority'] || `localhost:${PORT}`;
+  const url = new URL(req.url, `http://${host}`);
   const pathParts = url.pathname.split('/').filter(Boolean);
 
   // Recipient connects to /events (GET /events/{sessionID})
@@ -30,7 +39,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
+      ...(USE_HTTP2 ? {} : { 'Connection': 'keep-alive' })
     });
 
     if (!clients.has(sessionId)) {
@@ -89,5 +98,5 @@ const server = http.createServer((req, res) => {
 
 const PORT = 3000;
 server.listen(PORT, () => {
-  console.log(`[${new Date().toISOString()}] SSE Relay Server running on port ${PORT}. Verbose logging: ${LOGS}`);
+  console.log(`[${new Date().toISOString()}] SSE Relay Server running on port ${PORT} over ${USE_HTTP2 ? 'HTTP/2' : 'HTTP/1.1'}. Verbose logging: ${LOGS}`);
 });

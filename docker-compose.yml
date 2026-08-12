@@ -5,6 +5,7 @@ services:
     working_dir: /app
     environment:
       - LOGS=true
+      - SERVER_PROTOCOL=http
     volumes:
       - ./server.js:/app/server.js:ro
     command: node server.js
