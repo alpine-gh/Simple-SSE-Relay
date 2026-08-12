@@ -3,11 +3,15 @@
 This is a simple script to establish an SSE relay/server using Node (Docker + TailScale included). 
 
 Although this was made for an n8n workflow (to create a AI agent chat using an SSE Trigger), it can be used for virtually any situation where bidirectional communication is needed and WebSockets aren't supported.
-
-# How to install
+### Important: You probably shouldn't run this over the open internet, as there is no auth built-in. This is intended to be run via TailScale or on your local network. The `docker-compose` contains a TailScale sidecar, just uncomment it and add your authkey to use it.  
+# How to install (Docker)
 1. Clone/download this repo
 2. `docker compose up -d`  
-### Important: You probably shouldn't run this over the open internet, as there is no auth built-in. This is intended to be run via TailScale or on your local network, the `docker-compose` contains a commented out TailScale sidecar for your convenience.  
+
+# How to install (Manual)
+1. Clone/download this repo and open it
+2. `node server.js` in your terminal
+
 # How to use  
 ### 1. Start and open a channel using `GET` to `/events/{session_id}`   
 - `{session_id}` can be any string you choose. (If you open `/events/chat`, a channel called `chat` will be created.)
@@ -23,4 +27,4 @@ Although this was made for an n8n workflow (to create a AI agent chat using an S
 
 |Docker Env Variable |Value |Description |
 |---|---|---|
-|LOGS |`true`/`false` |Set to `true` by default. Posts payload information. |  
+|`LOGS` |`true`/`false` |Set to `true` by default. Posts payload information. |  
