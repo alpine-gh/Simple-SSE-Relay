@@ -8,7 +8,9 @@ This is a simple script to establish an SSE relay with Node 20 + Docker.
 
 # How to use
 1. Open listener using `/events/{session_id}`
-(Note: `session_id` can be whatever you want, if you open `http://your_sse_url:3000/events/chat`, a session called `chat` will be created. Sessions are automatically deleted when the last listener disconnects
+   
+**(Note: `session_id` can be whatever you want, if you open `http://your_sse_url:3000/events/chat`, a session called `chat` will be created. Sessions are automatically deleted when the last listener disconnects)**
+
 2. Send messages using `/publish/{session_id}`
 
 # Settings
