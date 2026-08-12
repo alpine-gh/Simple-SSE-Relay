@@ -1,8 +1,8 @@
 # Simple SSE relay using Node
 
-This is a simple script to establish an SSE relay with Node 20 + Docker (+ TailScale - optional). 
+This is a simple script to establish an SSE relay/server using Node (Docker + TailScale included). 
 
-Although this was made for an n8n workflow (to create a AI agent chat with an SSE Trigger), it can be used for virtually any situation where bi-directional communication is needed and WebSockets aren't supported.
+Although this was made for an n8n workflow (to create a AI agent chat using an SSE Trigger), it can be used for virtually any situation where bidirectional communication is needed and WebSockets aren't supported.
 
 # How to install
 1. Clone/download this repo
@@ -13,7 +13,7 @@ Although this was made for an n8n workflow (to create a AI agent chat with an SS
 - `{session_id}` can be any string you choose. (If you open `/events/chat`, a channel called `chat` will be created.)
 - Sessions are automatically created when the first listener connects and deleted when the last listener disconnects
 - Multiple listeners can connect to the same session to receive the same messages
-### 2. Send JSON messages via `POST` to `/publish/{session_id}`. (JSON can be in any schema format as long as it's valid code.)
+### 2. Send JSON messages to channel using `POST` to `/publish/{session_id}`
 - JSON payload can be in any valid format (no specific schema required)
 - Messages are delivered to all active listeners on that session
 - If no listeners are connected, the message is logged but not delivered
